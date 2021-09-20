@@ -11,6 +11,9 @@ class AbstractItem(core_models.TimeStampedModel):
 
     class Meta:
         abstract = True
+    
+    def __str__(self):
+        return self.name
 
 
 class RoomType(AbstractItem):
@@ -55,6 +58,9 @@ class Photo(core_models.TimeStampedModel):
 
     class Meta:
         db_table = 'photos'
+    
+    def __str__(self):
+        return self.name
 
 
 class Room(core_models.TimeStampedModel):
@@ -82,3 +88,6 @@ class Room(core_models.TimeStampedModel):
 
     class Meta:
         db_table = 'rooms'
+    
+    def __str__(self):
+        return self.name

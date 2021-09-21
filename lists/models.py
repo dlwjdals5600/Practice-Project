@@ -14,3 +14,8 @@ class List(core_models.TimeStampedModel):
 
     class Meta:
         db_table = 'lists'
+    
+    def count_rooms(self):
+        return self.rooms.count()
+    
+    count_rooms.short_description = "Number of Rooms"

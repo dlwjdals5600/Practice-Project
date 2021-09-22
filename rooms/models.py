@@ -60,7 +60,7 @@ class Photo(core_models.TimeStampedModel):
         db_table = 'photos'
     
     def __str__(self):
-        return self.name
+        return self.caption
 
 
 class Room(core_models.TimeStampedModel):

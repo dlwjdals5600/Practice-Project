@@ -7,6 +7,18 @@ class LoginForm(forms.Form):
     email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput)
 
+    def clean(self):
+        email = self.cleaned_data.get('email')
+        password = self.cleaned_data.get('password')
+        try:
+            user = models.User.objects.get(email=email)
+            if user.check_password(password):
+                return self.cleaned_data
+            else:
+                raise forms.ValidationError('정보가 잘못되었습니다.')
+        except models.User.DoesNotExist:
+            raise forms.ValidationError('존재하지 않는 유저입니다.')
+
 
 class SignUpForm(forms.ModelForm):
     class Meta:

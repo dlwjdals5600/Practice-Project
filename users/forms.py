@@ -28,11 +28,19 @@ class SignUpForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
     password1 = forms.CharField(widget=forms.PasswordInput, label='Confirm Password')
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        try:
+            models.User.objects.get(email=email)
+            raise forms.ValidationError('이미 존재하고 있는 이메일입니다.')
+        except models.User.DoesNotExist:
+            return email
+
     def clean_password1(self):
         password = self.cleaned_data.get('password')
         password1 = self.cleaned_data.get('password1')
         if password != password1:
-            raise forms.ValidationError('Password confirmation does not match')
+            raise forms.ValidationError('패스워드가 일치하지 않습니다.')
         else:
             return password
     

@@ -14,9 +14,9 @@ class LoginView(View):
         if form.is_valid():
             email = form.cleaned_data.get('email')
             password = form.cleaned_data.get('password')
-            user = authenticate(self.request, username=email, password=password)
+            user = authenticate(request, username=email, password=password)
             if user is not None:
-                login(self.request, user)
+                login(request, user)
                 return redirect(reverse('core:home'))
         return render(request, 'users/login.html', {'form':form})
 

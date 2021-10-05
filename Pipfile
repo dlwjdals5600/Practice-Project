@@ -9,6 +9,8 @@ pillow = "*"
 django-countries = "*"
 django-seed = "*"
 faker = "*"
+django-dotenv = "*"
+requests = "*"
 
 [dev-packages]
 

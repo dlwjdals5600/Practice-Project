@@ -254,3 +254,4 @@ zsdoc/data
 
 my_settings.py
 uploads/
+node_modules/

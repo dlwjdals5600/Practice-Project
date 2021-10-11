@@ -73,7 +73,7 @@ class Room(core_models.TimeStampedModel):
     city = models.CharField(max_length=80)
     price = models.IntegerField()
     address = models.CharField(max_length=140)
-    guests = models.IntegerField()
+    guests = models.IntegerField(help_text="총 몇 명이 예약하시나요??")
     beds = models.IntegerField()
     bedrooms = models.IntegerField()
     bathrooms = models.IntegerField()

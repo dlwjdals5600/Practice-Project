@@ -26,7 +26,9 @@ class Command(BaseCommand):
             room_models.Room,
             number,
             {
-                "name": lambda x: fake.address(),
+                "name": lambda x: fake.building_name(),
+                "country": lambda x: fake.current_country_code(),
+                "city": lambda x: fake.city(),
                 "host": lambda x: random.choice(all_users),
                 "room_type": lambda x: random.choice(room_types),
                 "guests": lambda x: random.randint(1, 20),

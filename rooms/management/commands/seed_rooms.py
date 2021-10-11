@@ -28,11 +28,11 @@ class Command(BaseCommand):
             {
                 "name": lambda x: fake.building_name(),
                 "country": lambda x: fake.current_country_code(),
-                "city": lambda x: fake.city(),
+                "city": lambda x: fake.metropolitan_city(),
                 "host": lambda x: random.choice(all_users),
                 "room_type": lambda x: random.choice(room_types),
                 "guests": lambda x: random.randint(1, 20),
-                "price": lambda x: random.randint(1, 300),
+                "price": lambda x: random.randint(50000, 300000),
                 "beds": lambda x: random.randint(1, 5),
                 "bedrooms": lambda x: random.randint(1, 5),
                 "bathrooms": lambda x: random.randint(1, 5),

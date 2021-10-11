@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 
-{% block page_name %}
-Rooms_Search
-{% endblock page_name %}
+{% block page_title %}
+Search
+{% endblock page_title %}
 
 
 {% block search_bar %}
@@ -15,7 +15,7 @@ Rooms_Search
 <h2>Rooms Search</h2>
 
 <form method='GET' action='{% url "rooms:search" %}'>
-    {{form}}
+    {{form.as_p}}
     <button> Search! </button>
 </form>
 

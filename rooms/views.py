@@ -1,5 +1,7 @@
 from django.utils import timezone
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
+from django.shortcuts import render
+from django_countries import countries
 from . import models
 
 class HomeView(ListView):
@@ -17,3 +19,8 @@ class HomeView(ListView):
         now = timezone.now()
         context['now'] = now
         return context
+
+class RoomDetail(DetailView):
+
+    model = models.Room
+

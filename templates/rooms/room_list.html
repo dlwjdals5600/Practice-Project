@@ -2,29 +2,35 @@
 
 
 {% block page_name %}
-    Home
+Home
 {% endblock page_name %}
 
 
 {% block content %}
-    {{now}}
 
-    {% for room in rooms %}
-        <h1>{{room.name}} / ${{room.price}}</h1>
-    {% endfor %}
+{{now}}
+
+{% for room in rooms %}
+<h3>
+    <a href='/rooms/{{room.pk}}'>
+        {{room.name}} / ${{room.price}}
+    </a>
+</h3>
+{% endfor %}
 
 
-    <h5>Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}</h5>
+<h5>Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}</h5>
 
-    {% if page_obj.has_previous %}
-        <a href='?page={{page_obj.number|add:-1}}'>Previous</a>
-    {% endif %}
+{% if page_obj.has_previous %}
+<a href='?page={{page_obj.number|add:-1}}'>Previous</a>
+{% endif %}
 
-    {% for page in page_obj.paginator.page_range %}
-        <a href='?page={{page}}'>{{page}}</a>
-    {% endfor %}
+{% for page in page_obj.paginator.page_range %}
+<a href='?page={{page}}'>{{page}}</a>
+{% endfor %}
 
-    {% if page_obj.has_next %}
-        <a href='?page={{page_obj.number|add:1}}'>Next</a>
-    {% endif %}
+{% if page_obj.has_next %}
+<a href='?page={{page_obj.number|add:1}}'>Next</a>
+{% endif %}
+
 {% endblock content %}

@@ -31,6 +31,7 @@ class SearchView(View):
     def get(self, request):
 
         country = request.GET.get('country')
+        city = request.GET.get('city')
 
         if country:
 
@@ -45,7 +46,7 @@ class SearchView(View):
                 guests = form.cleaned_data.get('guests')
                 bedrooms = form.cleaned_data.get('bedrooms')
                 beds = form.cleaned_data.get('beds')
-                baths = form.cleaned_data.get('baths')
+                bathrooms = form.cleaned_data.get('baths')
                 instant_book = form.cleaned_data.get('instant_book')
                 superhost = form.cleaned_data.get('superhost')
                 amenities = form.cleaned_data.get('amenities')
@@ -73,8 +74,8 @@ class SearchView(View):
                 if beds is not None:
                     filter_args["beds__gte"] = beds
 
-                if baths is not None:
-                    filter_args["baths__gte"] = baths
+                if bathrooms is not None:
+                    filter_args["baths__gte"] = bathrooms
 
                 if instant_book is True:
                     filter_args["instant_book"] = True
@@ -82,14 +83,21 @@ class SearchView(View):
                 if superhost is True:
                     filter_args["host__superhost"] = True
 
+                rooms = models.Room.objects.filter(**filter_args)
+
                 for amenity in amenities:
-                    filter_args["amenities"] = amenity
+                    rooms = rooms.filter(amenities=amenity)
+                    # filter_args["amenities"] = amenity
+                
 
                 for facility in facilities:
-                    filter_args["facilities"] = facility
+                    rooms = rooms.filter(facilities=facility)
+                    # filter_args["facilities"] = facility
 
-                queryset = models.Room.objects.filter(**filter_args).order_by('-created')
+                queryset = rooms.order_by('created')
 
+                # queryset = models.Room.objects.filter(**filter_args).order_by('-created')
+                
                 paginator = Paginator(queryset, 10, orphans=5)
 
                 page = request.GET.get('page', 1)
@@ -99,8 +107,8 @@ class SearchView(View):
                 return render(request, 'rooms/search.html',{'form':form,'rooms':rooms}) 
             
         else:
-
             form = forms.SearchForm()
+            
 
         return render(request, 'rooms/search.html',{'form':form})
 

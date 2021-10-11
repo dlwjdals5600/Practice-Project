@@ -1,16 +1,25 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <title>JM Travel</title>
+    <title>{% block page_title %}{% endblock page_title %}| JM Travel</title>
 </head>
+
 <body>
     <header class='container'>
-    {% include 'partials/nav.html' %}
+        {% include 'partials/nav.html' %}
+        {% block search_bar %}
+        <form method='get' action='{% url "rooms:search" %}'>
+
+            <input name='city' placeholder='Search by City' />
+
+        </form>
+        {% endblock search_bar %}
     </header>
 
     {% block content %} {% endblock %}
@@ -18,4 +27,5 @@
     {% include 'partials/footer.html' %}
 
 </body>
+
 </html>

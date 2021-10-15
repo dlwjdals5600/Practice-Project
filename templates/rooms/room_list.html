@@ -8,29 +8,43 @@ Home
 
 {% block content %}
 
-{{now}}
+<div class="container mx-auto pb-10">
+    <div class="rounded-xl bg-gray-800 h-60vh mt-32 mb-24 bg-cover bg-center -mx-40"
+        style="background-image:url(https://images.unsplash.com/photo-1556817411-31ae72fa3ea0?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1470&q=80)">
+    </div>
 
-{% for room in rooms %}
-<h3>
-    <a href='/rooms/{{room.pk}}'>
-        {{room.name}} / ${{room.price}}
-    </a>
-</h3>
-{% endfor %}
+    <div class="flex flex-wrap -mx-40 mb-10">
+        {% for room in rooms %}
+        {% include 'partials/room_card.html' with room=room %}
+        <!-- 앞에 room은 room_card.html에 있는 객체room, 뒤에 room은 현재 for문의 room -->
+        {% endfor %}
+    </div>
+    <div class="flex flex-col items-center">
+        <div class="font-medium text-lg">
+            Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
+        </div>
+        <div class="flex items-center">
+            {% if page_obj.has_previous %}
+            <a href='?page={{page_obj.number|add:-1}}' class="text-green-400">
+                <i class="fas fa-arrow-left fa-lg"></i>
+            </a>
+            {% endif %}
+            <span class="mx-3">
+                {% for page in page_obj.paginator.page_range %}
+                <a href='?page={{page}}'>{{page}}</a>
+                {% endfor %}
+            </span>
+            {% if page_obj.has_next %}
+            <a href='?page={{page_obj.number|add:1}}' class="text-green-400">
+                <i class="fas fa-arrow-right fa-lg"></i>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
 
 
-<h5>Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}</h5>
 
-{% if page_obj.has_previous %}
-<a href='?page={{page_obj.number|add:-1}}'>Previous</a>
-{% endif %}
 
-{% for page in page_obj.paginator.page_range %}
-<a href='?page={{page}}'>{{page}}</a>
-{% endfor %}
-
-{% if page_obj.has_next %}
-<a href='?page={{page_obj.number|add:1}}'>Next</a>
-{% endif %}
 
 {% endblock content %}

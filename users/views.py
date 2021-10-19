@@ -1,6 +1,7 @@
 import os
+from django.views.generic.detail import DetailView
 import requests
-from django.views.generic import FormView, View
+from django.views.generic import FormView, View, DetailView
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import authenticate, login, logout
@@ -164,3 +165,9 @@ def kakao_callback(request):
     except KakaoException as e:
         messages.error(request, e)
         return redirect(reverse('users:login'))
+
+
+class UserProfileView(DetailView):
+
+    model = models.User
+    context_object_name = "user_obj"    # UserProfileView에서 특정 변수명을 지정해주기 위해서 만듬

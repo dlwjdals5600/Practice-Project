@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.base import ContentFile
+from django.contrib import messages
 from . import forms, models
 
 class LoginView(View):
@@ -25,6 +26,7 @@ class LoginView(View):
         return render(request, 'users/login.html', {'form':form})
 
 def log_out(request):
+    messages.info(request, "다음에 또 봐요~")
     logout(request)
     return redirect(reverse('core:home'))
 
@@ -129,20 +131,20 @@ def kakao_callback(request):
         token_json = token_request.json()
         error      = token_json.get('error', None)
         if error is not None:
-            raise KakaoException()
+            raise KakaoException("인증코드를 가져올 수 없습니다.")
         access_token    = token_json.get('access_token')
         profile_request = requests.get('https://kapi.kakao.com//v2/user/me', headers={'Authorization': f'Bearer {access_token}'},)
         profile_json    = profile_request.json()
         email           = profile_json.get('kakao_account', None).get('email')
         if email is None:
-             raise KakaoException()
+             raise KakaoException("당신의 이메일이 필요합니다.")
         properties    = profile_json.get('properties')
         nickname      = properties.get('nickname')
         profile_image = properties.get('profile_image')
         try:
             user = models.User.objects.get(email=email)
             if user.login_method != models.User.LOGIN_KAKAO:
-                raise KakaoException()
+                raise KakaoException(f"{user.login_method}으로 이미 가입되어 있습니다. {user.login_method}로 로그인 해주세요!")
         except models.User.DoesNotExist:
             user = models.User.objects.create(
                 email        = email,
@@ -157,6 +159,8 @@ def kakao_callback(request):
                 photo_request = requests.get(profile_image)
                 user.avatar.save(f'{nickname}-avatar',ContentFile(photo_request.content))
         login(request, user)
+        messages.success(request, f"{user.first_name}님 돌아오신 것을 환영합니다.")
         return redirect(reverse('core:home'))
-    except KakaoException:
+    except KakaoException as e:
+        messages.error(request, e)
         return redirect(reverse('users:login'))

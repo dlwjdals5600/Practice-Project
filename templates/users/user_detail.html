@@ -28,7 +28,7 @@
         <span class="text-lg py-2 mb-5">{{user_obj.bio}}</span>
 
         {% if user == user_obj %}
-            <a href="#" class="btn btn--small bg-yellow-200 text-yellow-800 text-xl font-normal">프로필 수정</a>
+            <a href="{% url 'users:update' %}" class="btn btn--small bg-yellow-200 text-yellow-800 text-xl font-normal">프로필 수정</a>
         {% endif %}
     </div>
     {% if user_obj.rooms.count > 0 %}

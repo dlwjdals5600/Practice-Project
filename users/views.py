@@ -1,9 +1,8 @@
 import os
-from django.views.generic.detail import DetailView
 import requests
-from django.views.generic import FormView, View, DetailView
+from django.views.generic import FormView, View, DetailView, UpdateView
 from django.urls import reverse_lazy
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.base import ContentFile
 from django.contrib import messages
@@ -171,3 +170,30 @@ class UserProfileView(DetailView):
 
     model = models.User
     context_object_name = "user_obj"    # UserProfileView에서 특정 변수명을 지정해주기 위해서 만듬
+
+class UpdateProfileView(UpdateView):
+    model = models.User
+    template_name = "users/update_profile.html"
+    fields = [
+        "first_name",
+        "last_name",
+        "avatar",
+        "bio",
+        "birthdate",
+        "language",
+        "currency",
+    ]
+
+    def get_object(self, queryset=None):
+        # profile = self.request.user.id
+        # profile = get_object_or_404(models.User, pk=profile)
+        # print(self.request.user.id)
+        return self.request.user
+    
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class=form_class)
+        form.fields["first_name"].widget.attrs = {"placeholder": "이름"}
+        form.fields["last_name"].widget.attrs = {"placeholder": "성"}
+        form.fields["bio"].widget.attrs = {"placeholder": "소개"}
+        form.fields["birthdate"].widget.attrs = {"placeholder": "생일"}
+        return form

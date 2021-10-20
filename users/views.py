@@ -1,14 +1,16 @@
 import os
 import requests
+from django.contrib.auth.views import PasswordChangeView
 from django.views.generic import FormView, View, DetailView, UpdateView
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.base import ContentFile
 from django.contrib import messages
-from . import forms, models
+from django.contrib.messages.views import SuccessMessageMixin
+from . import forms, models, mixins
 
-class LoginView(View):
+class LoginView(mixins.VisitorsOnlyView, View):
 
     def get(self, request):
         form = forms.LoginForm()
@@ -171,7 +173,7 @@ class UserProfileView(DetailView):
     model = models.User
     context_object_name = "user_obj"    # UserProfileView에서 특정 변수명을 지정해주기 위해서 만듬
 
-class UpdateProfileView(UpdateView):
+class UpdateProfileView(mixins.MembersOnlyView, SuccessMessageMixin, UpdateView):
     model = models.User
     template_name = "users/update_profile.html"
     fields = [
@@ -183,6 +185,7 @@ class UpdateProfileView(UpdateView):
         "language",
         "currency",
     ]
+    success_message = "프로필 수정 완료"
 
     def get_object(self, queryset=None):
         # profile = self.request.user.id
@@ -195,5 +198,23 @@ class UpdateProfileView(UpdateView):
         form.fields["first_name"].widget.attrs = {"placeholder": "이름"}
         form.fields["last_name"].widget.attrs = {"placeholder": "성"}
         form.fields["bio"].widget.attrs = {"placeholder": "소개"}
-        form.fields["birthdate"].widget.attrs = {"placeholder": "생일"}
+        form.fields["birthdate"].widget.attrs = {"placeholder": "생일 xxxx-xx-xx"}
+        return form
+
+class UpdatePasswordView(
+    mixins.EmailLoginOnlyView,
+    mixins.MembersOnlyView,
+    SuccessMessageMixin,
+    PasswordChangeView
+):
+    
+    template_name = "users/update_password.html"
+    success_message ="비밀번호 수정 완료"
+    
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class=form_class)
+        form.fields["old_password"].widget.attrs = {"placeholder": "현재비밀번호"}
+        form.fields["new_password1"].widget.attrs = {"placeholder": "변경할 비밀번호"}
+        form.fields["new_password2"].widget.attrs = {"placeholder": "변경할 비밀번호 확인"}
         return form

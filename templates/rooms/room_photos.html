@@ -19,11 +19,15 @@
             <span class="ml-5 text-xl">{{photo.caption}}</span>
             </div>
             <div class="flex flex-col w-1/5">
-                <a class="btn btn--small bg-yellow-200 text-yellow-800 text-xl font-normal mb-5" href="#">수정</a>
+                <a class="btn btn--small bg-yellow-200 text-yellow-800 text-xl font-normal mb-5" href="{% url 'rooms:edit_photo' room.pk photo.pk %}">수정</a>
                 <a class="btn btn--small bg-red-400 text-gray-200 text-xl font-normal" href="{% url 'rooms:delete_photo' room.pk photo.pk %}">삭제</a>
             </div>
         </div>
         {% endfor%}
+
+        <div class="flex justify-center mt-5">
+            <a href="{% url 'rooms:edit' room.pk %}" class="text-green-500 font-medium text-xl">방으로 돌아가기</a>
+        </div>
        
     </div>
 {% endblock content %} 

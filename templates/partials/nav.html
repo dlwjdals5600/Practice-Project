@@ -1,9 +1,18 @@
 <ul class='flex text-sm font-medium h-full'>
     {% if user.is_authenticated %}
+    <li class="nav_link">
+        <a href="{% url 'users:switch_hosting' %}">
+            {% if request.session.is_hosting %}
+            Stop hosting
+            {% else %}
+            Start hosting
+            {% endif %}
+        </a>
+    </li>
     <li class='nav_link'><a href="{% url 'users:profile' user.pk %}">Profile</a></li>
-    <li class='nav_link'><a  href="{% url 'users:logout' %}">Log Out</a></li>
+    <li class='nav_link'><a href="{% url 'users:logout' %}">Log Out</a></li>
     {% else %}
-    <li class='nav_link'><a  href="{% url 'users:login' %}">Log In</a></li>
-    <li class='nav_link'><a  href="{% url 'users:signup' %}">Sign Up</a></li>
+    <li class='nav_link'><a href="{% url 'users:login' %}">Log In</a></li>
+    <li class='nav_link'><a href="{% url 'users:signup' %}">Sign Up</a></li>
     {% endif %}
 </ul>

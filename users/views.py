@@ -3,7 +3,8 @@ import requests
 from django.contrib.auth.views import PasswordChangeView
 from django.views.generic import FormView, View, DetailView, UpdateView
 from django.urls import reverse_lazy
-from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.shortcuts import render, redirect, reverse
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.base import ContentFile
 from django.contrib import messages
@@ -24,6 +25,7 @@ class LoginView(mixins.VisitorsOnlyView, View):
             user     = authenticate(request, username=email, password=password)
             if user is not None: 
                 login(request, user)
+                messages.success(request, f"{user.first_name}님 돌아오신 것을 환영합니다.")
                 return redirect(reverse('core:home'))
         return render(request, 'users/login.html', {'form':form})
 
@@ -218,3 +220,14 @@ class UpdatePasswordView(
         form.fields["new_password1"].widget.attrs = {"placeholder": "변경할 비밀번호"}
         form.fields["new_password2"].widget.attrs = {"placeholder": "변경할 비밀번호 확인"}
         return form
+    
+    def get_success_url(self):
+        return self.request.user.get_absolute_url()
+    
+@login_required
+def switch_hosting(request):
+    try:
+        del request.session["is_hosting"]
+    except KeyError:
+        request.session["is_hosting"] = True
+    return redirect(reverse("core:home"))

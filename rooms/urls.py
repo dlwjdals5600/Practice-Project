@@ -11,4 +11,5 @@ urlpatterns = [
     path("<int:room_pk>/photos<int:photo_pk>/delete", views.delete_photo, name='delete_photo'),
     path("<int:room_pk>/photos<int:photo_pk>/edit", views.EditPhotoView.as_view(), name='edit_photo'),
     path('search', views.SearchView.as_view(), name='search'),
+    path("create", views.CreateRoomView.as_view(), name='create'),
 ]

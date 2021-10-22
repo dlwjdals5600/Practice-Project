@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.shortcuts import reverse
+from core import managers as core_managers
 
 class User(AbstractUser):
 
@@ -56,6 +57,7 @@ class User(AbstractUser):
     currency = models.CharField(choices=CURRENCY_CHOICES, max_length=3, blank=True, default=CURRENCY_KRW)
     superhost = models.BooleanField(default=False)
     login_method = models.CharField(max_length=50, choices=LOGIN_CHOICES, default=LOGIN_EMAIL)
+    objects = core_managers.CustomUserManager()
 
     class Meta:
         db_table = 'users'

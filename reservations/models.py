@@ -1,6 +1,20 @@
+import datetime
 from django.db import models
 from django.utils import timezone
 from core import models as core_models
+
+class BetweenDay(core_models.TimeStampedModel):
+
+    day = models.DateField()
+    reservation = models.ForeignKey("Reservation", on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "BetweenDay"
+        verbose_name_plural = "BetweenDays"
+    
+    def __str__(self):
+        return str(self.day)
+
 
 class Reservation(core_models.TimeStampedModel):
 
@@ -40,3 +54,22 @@ class Reservation(core_models.TimeStampedModel):
 
     class Meta:
         db_table = 'reservations'
+    
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            start = self.check_in
+            print(start)
+            end = self.check_out
+            difference = end - start
+            existing_BetweenDay = BetweenDay.objects.filter(reservation__room=self.room,
+                day__range=(start, end)
+            ).exists()
+            if not existing_BetweenDay:
+                super().save(*args,  **kwargs)
+                for i in range(difference.days + 1):
+                    day = start + datetime.timedelta(days=i)
+                    print(day)
+                    BetweenDay.objects.create(day=day, reservation=self)
+                return
+        return super().save(*args, **kwargs)

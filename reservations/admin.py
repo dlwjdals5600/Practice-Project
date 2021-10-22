@@ -18,3 +18,7 @@ class ReservationAdmin(admin.ModelAdmin):
     )
 
     list_filter = ("status",)
+
+@admin.register(models.BetweenDay)
+class BetweenDayAdmin(admin.ModelAdmin):
+    list_display = ("day", "reservation")

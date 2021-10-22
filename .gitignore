@@ -252,7 +252,7 @@ zsdoc/data
 
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode,vim,macos,linux,zsh
 
-my_settings.py
+
 uploads/
 node_modules
 
@@ -261,4 +261,5 @@ node_modules
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
-.ebextensions
+
+secrets.json

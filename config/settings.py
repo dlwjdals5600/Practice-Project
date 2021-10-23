@@ -106,7 +106,7 @@ if DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, "db.sqlite3")
+            'NAME': os.path.join(BASE_DIR, "db.sqlite3"),
         }
     }
 else:
@@ -114,7 +114,11 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.path.join(BASE_DIR, "db.sqlite3")
+            'HOST': "jm-travel.cf7ja8eaevab.ap-northeast-2.rds.amazonaws.com",
+            'NAME': "jm-travel",
+            'USER': "postgres",
+            'PASSWORD': "postgres",
+            'PORT': "5432",
         }
     }
 

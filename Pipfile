@@ -12,6 +12,7 @@ faker = "*"
 django-dotenv = "*"
 requests = "*"
 pipenv-to-requirements = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 awsebcli = "*"
